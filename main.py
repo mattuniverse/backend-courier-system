@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from database import create_pool, close_pool
-from routers import auth, dashboard, users, customers, couriers, branches, parcels, tracking
+from routers import auth, dashboard, users, customers, couriers, branches, parcels, tracking, analytics, cost
 import logging
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -49,6 +49,8 @@ app.include_router(couriers.router)
 app.include_router(branches.router)
 app.include_router(parcels.router)
 app.include_router(tracking.router)
+app.include_router(analytics.router)
+app.include_router(cost.router)
 
 
 @app.get("/health", tags=["Health"])

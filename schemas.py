@@ -146,3 +146,49 @@ class DashboardStats(BaseModel):
     customers: int
     couriers: int
     revenue: float
+
+
+class BulkStatusIn(BaseModel):
+    parcel_ids: list[int]
+    status: str
+    location: Optional[str] = None
+    remarks: Optional[str] = None
+
+
+class DeliveryProofIn(BaseModel):
+    parcel_id: int
+    recipient_name: str
+    signature_data: Optional[str] = None
+
+
+class DeliveryProofOut(BaseModel):
+    parcel_id: int
+    recipient_name: str
+    delivered_at: Optional[datetime] = None
+    created_at: Optional[datetime] = None
+
+
+class AnalyticsSummary(BaseModel):
+    total_parcels: int
+    delivered_count: int
+    pending_count: int
+    in_transit_count: int
+    cancelled_count: int
+    returned_count: int
+    total_revenue: float
+    parcels_this_week: int
+    parcels_today: int
+    avg_delivery_days: float
+
+
+class CostEstimateIn(BaseModel):
+    weight_kg: float
+    parcel_type: str
+    distance_km: Optional[float] = None
+
+
+class CostEstimateOut(BaseModel):
+    base_rate: float
+    weight_cost: float
+    distance_cost: float
+    total: float
