@@ -3,15 +3,14 @@ services:
     name: courier-parcel-backend
     runtime: python
     plan: free
-    rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
-        sync: false
+        sync: false        # Supabase PostgreSQL URI
       - key: SECRET_KEY
-        sync: false
+        sync: false        # Generate with: python -c "import secrets; print(secrets.token_urlsafe(48))"
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
         value: "480"
       - key: CORS_ORIGINS
-        sync: false
+        sync: false        # Your Vercel frontend URL
