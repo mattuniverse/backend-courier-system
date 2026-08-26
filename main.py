@@ -1,0 +1,56 @@
+import os
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
+from database import create_pool, close_pool
+from routers import auth, dashboard, users, customers, couriers, branches, parcels, tracking
+import logging
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from limiter import limiter
+from dotenv import load_dotenv
+
+load_dotenv()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await create_pool()
+    logger.info("Database pool created")
+    yield
+    await close_pool()
+    logger.info("Database pool closed")
+
+
+app = FastAPI(title="Courier Parcel System API", version="1.0.0", lifespan=lifespan)
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+_extra_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "").split(",") if o.strip()]
+_dev_origins = ["http://localhost:3000", "http://localhost:5173"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_dev_origins + _extra_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(auth.router)
+app.include_router(dashboard.router)
+app.include_router(users.router)
+app.include_router(customers.router)
+app.include_router(couriers.router)
+app.include_router(branches.router)
+app.include_router(parcels.router)
+app.include_router(tracking.router)
+
+
+@app.get("/health", tags=["Health"])
+async def health():
+    return {"status": "ok"}
