@@ -1,5 +1,5 @@
 import asyncpg
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from database import get_conn
 
 router = APIRouter(tags=["Tracking"])
