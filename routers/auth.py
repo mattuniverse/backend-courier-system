@@ -1,5 +1,5 @@
 import asyncpg
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from database import get_conn
 from schemas import TokenOut
@@ -12,6 +12,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 @router.post("/login", response_model=TokenOut)
 @limiter.limit("10/minute")
 async def login(
+    request: Request,
     form: OAuth2PasswordRequestForm = Depends(),
     conn: asyncpg.Connection = Depends(get_conn),
 ):
