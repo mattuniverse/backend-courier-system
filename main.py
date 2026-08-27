@@ -37,6 +37,8 @@ _dev_origins = ["http://localhost:3000", "http://localhost:5173"]
 # e.g. https://frontend-courier-system-juzkk41bm-ako5.vercel.app
 _vercel_origin_regex = r"https://frontend-courier-system.*\.vercel\.app"
 
+_vercel_origin_regex = r"https://frontend-courier-system.*\.vercel\.app"
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_dev_origins + _extra_origins,
