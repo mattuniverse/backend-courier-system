@@ -32,11 +32,6 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 _extra_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "").split(",") if o.strip()]
 _dev_origins = ["http://localhost:3000", "http://localhost:5173"]
-
-# Matches your production Vercel domain AND any preview deployment URL
-# e.g. https://frontend-courier-system-juzkk41bm-ako5.vercel.app
-_vercel_origin_regex = r"https://frontend-courier-system.*\.vercel\.app"
-
 _vercel_origin_regex = r"https://frontend-courier-system.*\.vercel\.app"
 
 app.add_middleware(
